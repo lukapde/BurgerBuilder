@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import Aux from './../../hoc/Auxility';
+import Aux from '../../hoc/Auxility/Auxility';
 import Burger from './../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from './../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 
@@ -168,6 +169,27 @@ class BurgerBuilder extends Component {
                     ordered={this.purchaseHanlder}
                     price={this.state.totalPrice}
                 />
+            </Aux>);
+            orderSummary = <OrderSummary 
+                            purchaseCancel={this.purchaseCancelHandler}
+                            purchaseContinue={this.purchaseContinueHandler}
+                            price={this.state.totalPrice.toFixed(2)}
+                            ingredients={this.state.ingredients} />;
+        }
+
+        if(this.state.loading) {
+            orderSummary = <Spinner />;
+        }
+
+
+
+        return (
+            <Aux>
+                <Modal show={this.state.purchasing}
+                        modalClosed={this.purchaseCancelHandler} >
+                {orderSummary}
+                </Modal>
+                {burger}
             </Aux>
         );
     }
